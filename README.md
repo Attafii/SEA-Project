@@ -15,7 +15,7 @@ Both scripts perform the same scraping task but use different approaches to hand
 
 Here is a diagram illustrating the difference between sequential and parallel scraping:
 
-![Web Scraping Diagram]([https://github.com/yourusername/web-scraping-performance-comparison/raw/main/web-scraping-diagram.jpg](https://github.com/Attafii/SEA-Project/blob/master/example.png))
+![Web Scraping Diagram](https://github.com/Attafii/SEA-Project/blob/master/example.png)
 
 ## Features
 
