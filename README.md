@@ -11,6 +11,12 @@ The project includes two Python scripts:
 
 Both scripts perform the same scraping task but use different approaches to handle multiple URLs. The goal is to observe and compare the time taken by each method and assess their performance.
 
+## Visual Representation
+
+Here is a diagram illustrating the difference between sequential and parallel scraping:
+
+![Web Scraping Diagram]([https://github.com/yourusername/web-scraping-performance-comparison/raw/main/web-scraping-diagram.jpg](https://github.com/Attafii/SEA-Project/blob/master/example.png))
+
 ## Features
 
 - **Sequential Scraping**: Executes requests one at a time.
