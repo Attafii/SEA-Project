@@ -6,8 +6,8 @@ This repository contains a Python project for comparing the performance of seque
 
 The project includes two Python scripts:
 
-1. **`sequential_scraping.py`**: Scrapes data sequentially from 500 Wikipedia URLs.
-2. **`parallel_scraping.py`**: Scrapes data in parallel using multiple threads from 500 Wikipedia URLs.
+1. **`sequential_.py`**: Scrapes data sequentially from 500 Wikipedia URLs.
+2. **`parallel.py`**: Scrapes data in parallel using multiple threads from 500 Wikipedia URLs.
 
 Both scripts perform the same scraping task but use different approaches to handle multiple URLs. The goal is to observe and compare the time taken by each method and assess their performance.
 
