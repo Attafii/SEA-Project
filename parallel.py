@@ -2,9 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 import time
+import threading
 
-# Generate a list of 500 Wikipedia article URLs
+# Shared variables
 urls = [f'https://en.wikipedia.org/wiki/Special:Random' for _ in range(500)]
+results = []
+progress_counter = 0
+results_lock = threading.Lock()
+num_threads = 50  # Number of threads
 
 def scrape_article(url):
     try:
@@ -24,16 +29,38 @@ def scrape_article(url):
     except Exception as e:
         return None, None, None  # Handle errors gracefully
 
+def worker(urls_chunk):
+    global progress_counter
+    local_results = []
+    for url in urls_chunk:
+        result = scrape_article(url)
+        if result[0]:  # Check if the article was successfully scraped
+            local_results.append(result)
+            with results_lock:
+                progress_counter += 1
+    with results_lock:
+        results.extend(local_results)
+
+def partition_urls(urls, num_threads):
+    avg_chunk_size = len(urls) // num_threads
+    partitions = [urls[i:i + avg_chunk_size] for i in range(0, len(urls), avg_chunk_size)]
+    return partitions
+
 start_time = time.time()  # Start timing
 
-with ThreadPoolExecutor(max_workers=30) as executor:  # Increased number of workers for better parallelism
-    results = list(executor.map(scrape_article, urls))
+# Partition the URLs into chunks
+url_partitions = partition_urls(urls, num_threads)
 
+# Start the ThreadPoolExecutor with thread partitioning
+with ThreadPoolExecutor(max_workers=num_threads) as executor:
+    executor.map(worker, url_partitions)
+
+# Print results and progress
 for title, first_paragraph, links in results:
-    if title:  # Check if the article was successfully scraped
-        print(f'Title: {title}')
-        print(f'First Paragraph: {first_paragraph[:100]}...')  # Print only the first 100 characters for brevity
-        print(f'Links: {links[:5]}')  # Print only the first 5 links for brevity
+    print(f'Title: {title}')
+    print(f'First Paragraph: {first_paragraph[:100]}...')  # Print only the first 100 characters for brevity
+    print(f'Links: {links[:5]}')  # Print only the first 5 links for brevity
 
 end_time = time.time()  # End timing
 print(f"Parallel scraping took {end_time - start_time:.2f} seconds.")
+print(f"Total progress: {progress_counter}/{len(urls)}")
